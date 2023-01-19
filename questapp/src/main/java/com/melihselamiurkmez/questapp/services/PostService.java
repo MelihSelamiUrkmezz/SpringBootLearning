@@ -1,31 +1,46 @@
 package com.melihselamiurkmez.questapp.services;
-
 import com.melihselamiurkmez.questapp.entities.Post;
 import com.melihselamiurkmez.questapp.entities.User;
 import com.melihselamiurkmez.questapp.repository.PostRepository;
 import com.melihselamiurkmez.questapp.requests.PostCreateRequest;
 import com.melihselamiurkmez.questapp.requests.PostUpdateRequest;
+import com.melihselamiurkmez.questapp.response.LikeResponse;
+import com.melihselamiurkmez.questapp.response.PostResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
 
     private final PostRepository postRepository;
     private final UserService userService;
+    private LikeService likeService;
 
     public PostService(PostRepository postRepository, UserService userService) {
         this.postRepository = postRepository;
         this.userService = userService;
     }
-    public List<Post> getAllPosts(Optional<Long> userId) {
+
+    public void setLikeService(LikeService likeService){
+        this.likeService=likeService;
+    }
+
+    public List<PostResponse> getAllPosts(Optional<Long> userId) {
+
+        List<Post> posts_list;
 
         if(userId.isPresent()){
-            return postRepository.findByUserId(userId.get());
+            posts_list = postRepository.findByUserId(userId.get());
         }
-        return postRepository.findAll();
+        else{
+            posts_list =postRepository.findAll();
+        }
+        return posts_list.stream().map(p ->{
+            List<LikeResponse> likes=likeService.getAllLikes(Optional.of(null),Optional.of(p.getId()));
+        return new PostResponse(p,likes);}).collect(Collectors.toList());
     }
     public Post getOnePost(Long postId) {
         return postRepository.findById(postId).orElse(null);
