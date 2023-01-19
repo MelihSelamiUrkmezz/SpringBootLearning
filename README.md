@@ -2,14 +2,15 @@
 
 Proje gereksinimleri;
 
-1) Giriş yapılabilmeli.
-2) Kayıt olunabilmeli.
-3) Post atılabilmeli.
-4) Post'a yorum atılabilmeli.
-5) Post'a beğeni atılabilmeli.
-6) Bildirimler yazılabilmeli.
-7) Sistem 7/24 ayakta kalabilmeli.
+1) Login
+2) Register
+3) Create post
+4) Create comment for post
+5) Create like for post
+6) Read noti.
+7) Full safety
 
+Image'de bulunan db password'u ve application.propertieste bulunan password ve app_tokenler localde çalıştığı için dikkate alınmamıştır :)
 ## ApiDesign
 
 ./users
